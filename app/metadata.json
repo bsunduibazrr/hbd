@@ -1,0 +1,5 @@
+{
+  "name": "Magical Birthday Journey",
+  "description": "An immersive, multi-stage animated birthday experience featuring a passcode lock, interactive candle blowing, and a personalized AI-generated letter.",
+  "requestFramePermissions": ["microphone"]
+}
