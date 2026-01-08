@@ -1,8 +1,5 @@
-"use client";
-
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Lock, Unlock } from "lucide-react";
 
 interface LockScreenProps {
   onUnlock: () => void;
@@ -10,22 +7,22 @@ interface LockScreenProps {
 
 export const LockScreen: React.FC<LockScreenProps> = ({ onUnlock }) => {
   const [code, setCode] = useState("");
-  const [isError, setIsError] = useState(false);
-  const correctCode = "0107";
+  const [error, setError] = useState(false);
+  const SECRET_CODE = "0110";
 
-  const handleInput = (char: string) => {
-    if (code.length < 5) {
-      const newCode = code + char;
+  const handleInput = (btn: string) => {
+    if (code.length < 4) {
+      const newCode = code + btn;
       setCode(newCode);
       if (newCode.length === 4) {
-        if (newCode === correctCode) {
-          setTimeout(onUnlock, 500);
+        if (newCode === SECRET_CODE) {
+          onUnlock();
         } else {
-          setIsError(true);
+          setError(true);
           setTimeout(() => {
+            setError(false);
             setCode("");
-            setIsError(false);
-          }, 800);
+          }, 1500);
         }
       }
     }
@@ -36,69 +33,125 @@ export const LockScreen: React.FC<LockScreenProps> = ({ onUnlock }) => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 1.1 }}
-      className="relative z-10 w-[92%] max-w-md p-6 sm:p-8 rounded-3xl backdrop-blur-2xl bg-white/10 border border-white/20 shadow-2xl text-center"
-    >
-      <div className="mb-6 sm:mb-8">
-        <motion.div
-          animate={isError ? { x: [-10, 10, -10, 10, 0] } : {}}
-          className={`w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full flex items-center justify-center mb-4 transition-colors ${
-            isError
-              ? "bg-red-500/30"
-              : code === correctCode
-              ? "bg-green-500/30"
-              : "bg-purple-500/30"
-          }`}
-        >
-          {code === correctCode ? (
-            <Unlock className="text-white w-8 h-8 sm:w-10 sm:h-10" />
-          ) : (
-            <Lock className="text-white w-8 h-8 sm:w-10 sm:h-10" />
-          )}
-        </motion.div>
-        <h2 className="text-2xl sm:text-3xl font-serif text-white mb-2">
-          Unlock the Magic
-        </h2>
-        <p className="text-slate-300 text-sm sm:text-base">
-          Enter the special date (MM.DD)
-        </p>
-      </div>
-
-      <div className="flex justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
-        {[0, 1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className={`w-10 h-14 sm:w-12 sm:h-16 border-2 rounded-xl flex items-center justify-center text-xl sm:text-2xl font-bold transition-all duration-300 ${
-              code[i]
-                ? "border-white bg-white/20 text-white"
-                : "border-white/20 bg-transparent text-white/40"
-            } ${isError ? "border-red-500 text-red-500" : ""}`}
+    <div className="min-h-screen w-full flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-full max-w-105 bg-[#2d1b4d]/40 backdrop-blur-xl border border-white/10 rounded-[40px] p-8 sm:p-12 flex flex-col items-center shadow-2xl relative overflow-hidden"
+      >
+        {/* Top Lock Icon */}
+        <div className="w-24 h-24 bg-[#6c48d3]/50 rounded-full flex items-center justify-center mb-10 shadow-[0_0_30px_rgba(108,72,211,0.3)]">
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-white"
           >
-            {code[i] || "•"}
-          </div>
-        ))}
-      </div>
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
 
-      <div className="grid grid-cols-3 gap-3 sm:gap-4">
-        {["1", "2", "3", "4", "5", "6", "7", "8", "9", "🤍", "0", "⌫"].map(
-          (btn) => (
-            <motion.button
-              key={btn}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() =>
-                btn === "⌫" ? handleBackspace() : handleInput(btn)
-              }
-              className="h-14 sm:h-16 rounded-2xl bg-white/5 hover:bg-white/15 border border-white/10 text-white text-lg sm:text-xl font-medium transition-colors flex items-center justify-center"
+        {/* Text Section */}
+        <div className="text-center space-y-2 mb-10">
+          <h1 className="text-4xl font-serif text-white tracking-wide">
+            Unlock the Magic
+          </h1>
+          <p className="text-white/60 text-lg font-light">
+            Enter the special date (MM.DD)
+          </p>
+        </div>
+
+        {/* Code Indicator Boxes */}
+        <div className={`flex space-x-3 mb-12 ${error ? "animate-shake" : ""}`}>
+          {[...Array(4)].map((_, i) => (
+            <div
+              key={i}
+              className={`w-14 h-14 rounded-xl border-2 flex items-center justify-center transition-all duration-300 ${
+                code.length > i
+                  ? "border-white/40 bg-white/10"
+                  : "border-white/10 bg-white/5"
+              } ${error ? "border-red-500/50 bg-red-500/10" : ""}`}
             >
-              {btn}
+              <div
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  code.length > i ? "bg-white scale-125" : "bg-white/20"
+                }`}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Keypad Grid */}
+        <div className="grid grid-cols-3 gap-4 w-full">
+          {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((num) => (
+            <motion.button
+              key={num}
+              whileHover={{ backgroundColor: "rgba(255,255,255,0.1)" }}
+              whileTap={{ scale: 0.92 }}
+              onClick={() => handleInput(num)}
+              className="h-16 rounded-2xl cursor-pointer bg-white/5 border border-white/5 text-white text-2xl font-light transition-all flex items-center justify-center hover:border-white/20"
+            >
+              {num}
             </motion.button>
-          )
+          ))}
+
+          {/* Bottom Row */}
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="h-16 rounded-2xl cursor-pointer bg-white/5 border border-white/5 text-white text-2xl font-light transition-all flex items-center justify-center hover:border-white/20"
+          >
+            <span className="text-2xl">⭐️</span>
+          </motion.button>
+
+          <motion.button
+            whileHover={{ backgroundColor: "rgba(255,255,255,0.1)" }}
+            whileTap={{ scale: 0.92 }}
+            onClick={() => handleInput("0")}
+            className="h-16 rounded-2xl bg-white/5 border cursor-pointer border-white/5 text-white text-2xl font-light transition-all flex items-center justify-center hover:border-white/20"
+          >
+            0
+          </motion.button>
+
+          <motion.button
+            whileHover={{ backgroundColor: "rgba(255,255,255,0.1)" }}
+            whileTap={{ scale: 0.92 }}
+            onClick={handleBackspace}
+            className="h-16 rounded-2xl cursor-pointer bg-white/5 border border-white/5 text-white text-2xl font-light transition-all flex items-center justify-center hover:border-white/20"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+              <line x1="18" y1="9" x2="12" y2="15"></line>
+              <line x1="12" y1="9" x2="18" y2="15"></line>
+            </svg>
+          </motion.button>
+        </div>
+
+        {error && (
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="absolute bottom-4 text-red-400 font-medium tracking-widest text-xs uppercase"
+          >
+            Try Again
+          </motion.p>
         )}
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 };

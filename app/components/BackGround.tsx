@@ -57,11 +57,11 @@ export const Background: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-gradient-to-b from-slate-950 via-purple-950 to-slate-950">
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-linear-to-b from-slate-950 via-purple-950 to-slate-950">
       {elements.map((el) => (
         <FloatingElement key={el.id} {...el} />
       ))}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-transparent via-slate-950/40 to-slate-950 opacity-60" />
+      <div className="absolute inset-0  from-transparent via-slate-950/40 to-slate-950 opacity-60 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))]" />
     </div>
   );
 };
