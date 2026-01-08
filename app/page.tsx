@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { LockScreen } from "./components/LockScreen";
 import { CakeScene } from "./components/CakeScene";
 import { LetterScene } from "./components/LetterScene";
@@ -15,7 +15,7 @@ enum Step {
 const App: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<Step>(Step.LOCK);
   const [isUnlocked, setIsUnlocked] = useState(false);
-  const [playMusic, setPlayMusic] = useState(false);
+  const [musicUrl, setMusicUrl] = useState("");
 
   const startExperience = useCallback(() => {
     setIsUnlocked(true);
@@ -23,9 +23,11 @@ const App: React.FC = () => {
   }, []);
 
   const handleBlowCandles = useCallback(() => {
-    // We set music to true here.
-    // On mobile, this direct response to a click/tap is required to allow autoplay.
-    setPlayMusic(true);
+    // Mobile browsers require a direct user interaction to play audio.
+    // By setting the URL here, the browser sees the iframe load as a result of the click.
+    setMusicUrl(
+      "https://www.youtube.com/embed/yKNxeF4KMsY?autoplay=1&mute=0&loop=1&playlist=yKNxeF4KMsY"
+    );
   }, []);
 
   return (
@@ -35,14 +37,14 @@ const App: React.FC = () => {
       <div className="fixed top-[-10%] right-[-10%] w-[60%] h-[60%] bg-pink-600/15 blur-[120px] rounded-full z-[-1]"></div>
       <div className="fixed bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-blue-600/15 blur-[120px] rounded-full z-[-1]"></div>
 
-      {/* Music - Coldplay Yellow - Triggers on candle blow */}
-      {playMusic && (
-        <div className="hidden pointer-events-none absolute opacity-0">
+      {/* Hidden Music Player - Only loads when candles are blown */}
+      {musicUrl && (
+        <div className="hidden pointer-events-none absolute opacity-0 overflow-hidden w-0 h-0">
           <iframe
             width="1"
             height="1"
-            src="https://www.youtube.com/embed/yKNxeF4KMsY?autoplay=1&mute=0&loop=1&playlist=yKNxeF4KMsY"
-            title="Coldplay - Yellow"
+            src={musicUrl}
+            title="Birthday Music"
             allow="autoplay"
           ></iframe>
         </div>
@@ -84,7 +86,6 @@ const App: React.FC = () => {
         <LetterScene
           onNext={() => {
             setCurrentStep(Step.FINAL);
-            // Small delay to ensure the scroll target is rendered
             setTimeout(() => {
               const element = document.getElementById("final-section");
               element?.scrollIntoView({ behavior: "smooth" });

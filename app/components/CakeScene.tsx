@@ -18,18 +18,17 @@ export const CakeScene: React.FC<CakeSceneProps> = ({ onComplete, onBlow }) => {
 
   const handleBlow = () => {
     if (blown) return;
-    setBlown(true);
 
-    // Safety check for onBlow to trigger music instantly on user gesture
-    if (onBlow) onBlow();
+    onBlow();
+    setBlown(true);
 
     try {
       if (typeof confetti === "function") {
         (confetti as any)({
-          particleCount: 150,
-          spread: 70,
+          particleCount: 250,
+          spread: 100,
           origin: { y: 0.6 },
-          colors: ["#ff0080", "#7928ca", "#ffffff", "#0070f3", "#f0f0f0"],
+          colors: ["#FFD700", "#FF69B4", "#FFFFFF", "#FF1493", "#F0E68C"],
         });
       }
     } catch (e) {
@@ -38,124 +37,170 @@ export const CakeScene: React.FC<CakeSceneProps> = ({ onComplete, onBlow }) => {
 
     setTimeout(() => {
       onComplete();
-    }, 4500);
+    }, 5500);
   };
 
   const NumberCandle = ({ num, xOffset }: { num: string; xOffset: string }) => (
     <div
-      className="absolute -top-16 md:-top-20 z-30 flex flex-col items-center"
+      className="absolute -top-24 md:-top-32 z-50 flex flex-col items-center"
       style={{ left: xOffset, transform: "translateX(-50%)" }}
     >
+      {/* Intense Realistic Flame */}
       {!blown && (
-        <div className="relative mb-1">
-          <div className="candle-flame"></div>
-          <div className="absolute -inset-2 bg-yellow-400/30 blur-xl rounded-full animate-pulse"></div>
+        <div className="relative mb-3">
+          {/* Flame Layers */}
+          <div className="w-4 h-8 bg-gradient-to-t from-orange-600 via-yellow-400 to-white rounded-full blur-[1px] animate-pulse shadow-[0_0_20px_#ff9d00] relative">
+            <div className="absolute inset-0 bg-white/40 blur-sm rounded-full scale-75"></div>
+          </div>
+          {/* Wide Glow Aura */}
+          <div className="absolute -inset-8 bg-yellow-500/20 blur-[40px] rounded-full animate-flicker"></div>
+          <div className="absolute -inset-4 bg-orange-500/10 blur-[20px] rounded-full"></div>
         </div>
       )}
+
+      {/* Golden Number Body */}
       <div className="relative group">
-        <span className="text-4xl md:text-5xl font-bold bg-gradient-to-b from-pink-100 via-white to-pink-200 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] font-serif">
+        <span className="text-6xl md:text-8xl font-black font-serif bg-gradient-to-b from-[#FFF5C3] via-[#FFD700] to-[#B8860B] bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]">
           {num}
         </span>
-        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-0.5 h-2 bg-gray-400"></div>
+        {/* Golden Wick */}
+        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-1.5 h-4 bg-gradient-to-b from-gray-800 to-gray-600 rounded-full"></div>
       </div>
     </div>
   );
 
   return (
     <div
-      className={`flex flex-col items-center justify-center space-y-10 md:space-y-16 transition-all duration-1000 ${
+      className={`flex flex-col items-center justify-center space-y-12 md:space-y-24 transition-all duration-1000 ${
         visible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
       }`}
     >
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 1 }}
-        className="text-center space-y-3 md:space-y-6"
+        transition={{ delay: 0.3, duration: 1.2 }}
+        className="text-center space-y-6"
       >
-        <h2 className="text-3xl md:text-7xl font-serif bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-white to-blue-400 drop-shadow-[0_0_15px_rgba(236,72,153,0.3)] animate-float px-2">
-          Make a Wish <span className="text-white">✨</span>
+        <h2 className="text-4xl md:text-4xl font-serif bg-clip-text text-transparent bg-gradient-to-r from-[#FFD700] via-white to-[#FFD700] drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] animate-float tracking-tighter">
+          Happy 19th Birthday
         </h2>
-        <p className="text-blue-200 font-light italic text-base md:text-2xl opacity-90 px-4">
-          Give the flame a tap to make your wish
-        </p>
+        <div className="flex items-center justify-center space-x-4">
+          <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-pink-300"></div>
+          <p className="text-pink-100/90 font-light italic text-lg md:text-3xl tracking-[0.3em] uppercase">
+            Make a wish please
+          </p>
+          <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-pink-300"></div>
+        </div>
       </motion.div>
 
-      <div className="relative group perspective-distant scale-[0.6] sm:scale-90 md:scale-100">
+      {/* Luxury Grand Cake */}
+      <div className="relative perspective-1000 scale-90 sm:scale-110 md:scale-125">
         <AnimatePresence>
           {!blown &&
-            [1, 2, 3, 4, 5].map((i) => (
+            [1, 2, 3, 4].map((i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, scale: 0, y: 0 }}
+                initial={{ opacity: 0, y: 0 }}
                 animate={{
-                  opacity: [0, 1, 0],
-                  scale: [0.5, 1.2, 0.8],
-                  y: -180 - i * 20,
-                  x: Math.sin(i) * 70,
+                  opacity: [0, 0.7, 0],
+                  y: -300,
+                  x: Math.sin(i) * 150,
                 }}
-                transition={{
-                  duration: 4 + i,
-                  repeat: Infinity,
-                  delay: i * 0.5,
-                }}
-                className="absolute text-pink-400 text-2xl z-0"
+                transition={{ duration: 6, repeat: Infinity, delay: i * 1.2 }}
+                className="absolute text-yellow-200/50 text-3xl pointer-events-none z-0"
               >
-                🎈
+                ✨
               </motion.div>
             ))}
         </AnimatePresence>
 
         <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="relative cursor-pointer"
+          whileHover={{ scale: 1.03 }}
+          className="relative cursor-pointer group"
           onClick={handleBlow}
         >
-          {/* Cake Structure */}
-          <div className="relative mx-auto w-32 h-24 bg-gradient-to-b from-white to-pink-100 rounded-t-[50px] rounded-b-xl z-30 shadow-2xl border-b-2 border-pink-200">
-            <NumberCandle num="1" xOffset="35%" />
-            <NumberCandle num="9" xOffset="65%" />
-          </div>
+          {/* Top Tier - Cream & Gold Drip */}
+          <div className="relative mx-auto w-40 h-24 bg-gradient-to-b from-[#FFFDF5] to-[#FFF5E1] rounded-t-[40px] rounded-b-xl z-40 shadow-2xl border-b-2 border-orange-100/50">
+            <NumberCandle num="1" xOffset="30%" />
+            <NumberCandle num="9" xOffset="70%" />
 
-          <div className="relative mx-auto w-56 h-28 bg-gradient-to-b from-pink-100 to-pink-200 rounded-t-[40px] rounded-b-xl z-20 -mt-2 shadow-2xl border-b-2 border-pink-300">
-            <div className="absolute inset-0 flex items-center justify-center opacity-30">
-              <span className="text-2xl text-white tracking-[1em]">••••••</span>
+            {/* Elegant Gold Drips */}
+            <div className="absolute -bottom-4 left-0 right-0 flex justify-around pointer-events-none">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  className={`w-4 ${
+                    i % 2 === 0 ? "h-10" : "h-6"
+                  } bg-[#FFD700] rounded-full -mt-2 shadow-lg opacity-80`}
+                ></div>
+              ))}
             </div>
           </div>
 
-          <div className="relative mx-auto w-72 md:w-80 h-36 bg-gradient-to-b from-pink-200 to-pink-300 rounded-t-[40px] rounded-b-3xl z-10 -mt-2 shadow-2xl border-b-4 border-pink-400">
-            <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full shadow-inner opacity-80"></div>
-            <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full shadow-inner opacity-80"></div>
+          {/* Middle Tier - Rose Pink & Pearls */}
+          <div className="relative mx-auto w-64 h-28 bg-gradient-to-b from-[#FFB6C1] to-[#FF69B4] rounded-t-[40px] rounded-b-xl z-30 -mt-2 shadow-2xl border-b-4 border-pink-700/20">
+            {/* Pearl Decorations */}
+            <div className="absolute bottom-6 left-0 right-0 flex justify-center space-x-3 opacity-80">
+              {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+                <div
+                  key={i}
+                  className="w-3 h-3 bg-white rounded-full shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]"
+                ></div>
+              ))}
+            </div>
           </div>
 
-          <div className="w-[300px] md:w-[450px] h-12 md:h-14 bg-gradient-to-b from-white via-blue-50 to-blue-100 shadow-[0_25px_50px_rgba(0,0,0,0.4)] rounded-[50%] mx-auto -mt-6 z-0 border-b-8 md:border-b-10 border-blue-200/40" />
+          {/* Bottom Tier - Deep Rose & Patterns */}
+          <div className="relative mx-auto w-80 h-36 bg-gradient-to-b from-[#FF69B4] to-[#C71585] rounded-t-[50px] rounded-b-3xl z-20 -mt-2 shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
+            <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
+              <span className="text-[100px] font-serif">❦</span>
+            </div>
+            <div className="absolute inset-x-0 bottom-6 flex justify-around px-10">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <div
+                  key={i}
+                  className="w-4 h-4 bg-[#FFD700]/40 rounded-full border border-white/20"
+                ></div>
+              ))}
+            </div>
+          </div>
+
+          {/* Luxury Cake Stand */}
+          <div className="relative mx-auto w-[380px] h-12 bg-gradient-to-b from-white to-gray-200 shadow-2xl rounded-[50%] -mt-6 z-10 flex items-center justify-center">
+            <div className="w-[95%] h-[80%] border-2 border-[#FFD700]/30 rounded-[50%]"></div>
+          </div>
+
+          {/* Ground Glow */}
+          <div className="w-[450px] h-20 bg-[#FFD700]/10 blur-[60px] rounded-[50%] mx-auto -mt-10 z-0 pointer-events-none" />
         </motion.div>
       </div>
 
-      <div className="flex flex-col items-center space-y-6 pt-6">
+      <div className="flex flex-col items-center space-y-10 pt-4">
         <motion.button
           whileHover={{
             scale: 1.05,
-            boxShadow: "0 0 40px rgba(236,72,153,0.7)",
+            boxShadow: "0 0 60px rgba(255,215,0,0.4)",
           }}
           whileTap={{ scale: 0.95 }}
           onClick={handleBlow}
           disabled={blown}
-          className={`px-8 md:px-10 cursor-pointer py-3 md:py-4 rounded-full bg-black text-white text-lg md:text-2xl font-bold shadow-2xl transition-all duration-500 transform ${
-            blown ? "opacity-0 scale-90 translate-y-10" : ""
+          className={`w-80 h-20 rounded-full bg-black text-white text-xl md:text-xl font-black shadow-[0_25px_50px_rgba(0,0,0,0.4)] transition-all duration-1000 border-2 border-white/20 uppercase tracking-widest ${
+            blown ? "opacity-0 scale-90 translate-y-10" : "opacity-100"
           }`}
         >
-          {blown ? "Wish sent! ✨" : "Blow the candles 🌬️"}
+          {blown ? "Magic in the air..." : "Blow Your Candles 🌬️"}
         </motion.button>
 
         {blown && (
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-pink-300 font-serif italic text-xl md:text-3xl animate-pulse mt-4 text-center tracking-wide px-4"
+            className="text-center space-y-4"
           >
-            "May your all wishes come true..."
-          </motion.p>
+            <p className="text-white font-serif italic text-3xl md:text-5xl drop-shadow-[0_0_20px_rgba(255,255,255,0.6)] tracking-wide">
+              May your all wishes come true
+            </p>
+          </motion.div>
         )}
       </div>
     </div>
