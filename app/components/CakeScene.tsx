@@ -1,5 +1,5 @@
-"use client";
 import React, { useState, useEffect } from "react";
+// @ts-ignore
 import confetti from "canvas-confetti";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -25,7 +25,7 @@ export const CakeScene: React.FC<CakeSceneProps> = ({ onComplete, onBlow }) => {
 
     try {
       if (typeof confetti === "function") {
-        (confetti as Function)({
+        (confetti as any)({
           particleCount: 150,
           spread: 70,
           origin: { y: 0.6 },
